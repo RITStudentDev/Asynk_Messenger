@@ -40,7 +40,21 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q',
 ]
+
+# Django Q configuration
+Q_CLUSTER = {
+    'name': 'DjangoORM',
+    'workers': 4,
+    'timeout': 90,
+    'compress': True,
+    'save_limit': 250,
+    'queue_limit': 500,
+    'label': 'Django Q',
+    'orm': 'default',
+    'max_attempts': 3,
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
