@@ -45,3 +45,14 @@ def send_message_view(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+@require_http_methods(["GET"])
+def message_status_view(request, user_id):
+    """
+    Gets messages which are set to be sent to user with user_id.
+    """
+    messages = Message.objects.filter(receiverId=user_id).values(
+        'messageId', 'senderId', 'content', 'timestamp', 'status'
+    )
+
+    return JsonResponse({'messages': list(messages)}, status=200)
