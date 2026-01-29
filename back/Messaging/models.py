@@ -14,6 +14,7 @@ class Message(models.Model):
     receiverId = models.CharField(max_length=255)
     senderId = models.CharField(max_length=255)
     content = models.TextField()
+    mediaUrl = models.URLField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=MESSAGE_STATUS, default='pending')
     retryCount = models.IntegerField(default=0)
