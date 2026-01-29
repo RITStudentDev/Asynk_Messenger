@@ -11,18 +11,18 @@ from .tasks import process_pending_messages
 # Create your views here.
 @csrf_exempt
 @require_http_methods(["POST"])
-def send_message_view(request):
+def send_message(request):
     """
     API endpoint to send a message.
-    Adds meesage to DB and queues it for sending.
-    Expects JSON payload with 'recieverId', 'senderId', and 'content'.
+    Adds message to DB and queues it for sending.
+    Expects JSON payload with 'receiverId', 'senderId', and 'content'.
     """
 
     try:
         data = json.loads(request.body)
 
         # Ensures required fields are filled
-        required_fields = ['recieverId', 'senderId', 'content']
+        required_fields = ['receiverId', 'senderId', 'content']
         if not all(field in data for field in required_fields):
             return JsonResponse({'error': 'Missing required fields.'}, status=400)
             
@@ -30,7 +30,7 @@ def send_message_view(request):
         message = Message.objects.create(
             messageId=str(uuid.uuid4()),
             senderId=data['senderId'],
-            recieverId=data['recieverId'],
+            receiverId=data['receiverId'],
             content=data['content']
         )
 
@@ -47,7 +47,7 @@ def send_message_view(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 @require_http_methods(["GET"])
-def message_status_view(request, user_id):
+def get_messages(request, user_id):
     """
     Gets messages which are set to be sent to user with user_id.
     """
