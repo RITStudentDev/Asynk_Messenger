@@ -16,8 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
+
+router = routers.DefaultRouter()
+router.register(r'users', )
 
 urlpatterns = [
+    path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('messages/', include('Messaging.urls')),
 ]
