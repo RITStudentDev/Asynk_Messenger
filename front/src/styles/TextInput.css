@@ -1,0 +1,30 @@
+.input-container {
+    position: relative; 
+    display: flex;
+    align-items: center;
+}
+
+input {
+    padding: 10px 10px 10px 20px; 
+    border: 1px solid #aaa;
+    background-color: var(--ui-main-);
+}
+
+.focus-bar {
+    position: absolute;
+    left: -8px;             
+    top: 49%;      
+    transform: translateY(-50%);
+
+    background-color: #09f288;
+    width: 4px;
+    height: 0;
+    border-radius: 4px;
+
+    transition: height 0.25s ease-in-out;
+}
+
+.focus-bar.active {
+    height: 36px;
+    border-radius: 0%;
+}
