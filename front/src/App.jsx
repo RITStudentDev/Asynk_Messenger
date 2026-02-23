@@ -1,25 +1,17 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import './App.css'
 
-import ChatInput from './components/ChatInput.jsx'
+import SignupPage from './pages/SignupPage'
+import LoginPage from './pages/LoginPage'
 
-function App() {
-  
-
-  return (
-    <>
-      <h1>Messaging page</h1>
-      <ol>
-        <li>chat message example 1</li>
-        <li>chat message example 2</li>
-      </ol>
-      <div className='c-input-container'>
-        <ChatInput />
-      </div>
-      <button>Send</button>
-    </>
-  )
-    
-}
+function App() { return (
+  <Router>
+    <Routes>
+      <Route path="/" element={<h1>rendering</h1>}/>
+      <Route path="/signup" element={<SignupPage/>}/>
+      <Route path="/login" element={<LoginPage/>}/>
+    </Routes>
+  </Router>
+) } 
 
 export default App
