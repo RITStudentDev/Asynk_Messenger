@@ -26,8 +26,8 @@ async function apiFetch(endpoint, options = {}, retry = false) {
     return response.json();
 }
 
-export const get_user_data = async (username) => {
-    return await apiFetch(`/user_data/${username}/`);
+export const get_user_data = async (userId) => {
+    return await apiFetch(`/user_data/${UserId}/`);
 };
 
 export const refresh_token = async () => {
