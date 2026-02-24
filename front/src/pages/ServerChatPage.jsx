@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 
 function ServerChatPage (){
 
-        const { roomName} = useParams();
+        const {roomName} = useParams();
         const [messages, setMessages] = useState([]);
         const ws = useRef(null)
 
