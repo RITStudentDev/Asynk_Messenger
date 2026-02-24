@@ -21,8 +21,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     # Recieve message from socket
-    async def receive(self, message_data):
-        message_data_json = json.loads(message_data)
+    async def receive(self, text_data=None, bytes_data=None):
+        message_data_json = json.loads(text_data)
         message = message_data_json['message']
 
         await self.channel_layer.group_send(
