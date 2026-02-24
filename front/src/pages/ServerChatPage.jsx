@@ -1,6 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { useParams } from 'react-router-dom';
 
+import ChatInput from '../components/ChatInput';
+
 function ServerChatPage (){
 
         const {roomName} = useParams();
@@ -32,8 +34,13 @@ function ServerChatPage (){
         }, [roomName]);
     return (
         <>
-            <h1>Chat Server Index</h1>
             <h3>Connected: {roomName}</h3>
+            <div>
+                <ul>
+                    <li>Test message</li>
+                </ul>
+            </div>
+            <ChatInput/>
         </>
         
     )
