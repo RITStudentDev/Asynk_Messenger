@@ -3,6 +3,7 @@ import './App.css'
 
 import SignupPage from './pages/SignupPage'
 import LoginPage from './pages/LoginPage'
+import ServerChatPage from './pages/ServerChatPage'
 
 function App() { return (
   <Router>
@@ -10,6 +11,7 @@ function App() { return (
       <Route path="/" element={<h1>rendering</h1>}/>
       <Route path="/signup" element={<SignupPage/>}/>
       <Route path="/login" element={<LoginPage/>}/>
+      <Route path="/chat/:roomName" element={<ServerChatPage/>}/>
     </Routes>
   </Router>
 ) } 
