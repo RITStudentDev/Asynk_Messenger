@@ -1,0 +1,20 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 18px;
+    flex-direction: column;
+    background-color: #1c1d22;
+    border: solid 2px #3d3d45;
+    align-items: flex-start;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
