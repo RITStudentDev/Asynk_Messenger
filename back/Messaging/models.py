@@ -1,12 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class room(models.Model):
-    roomId = models.CharField(max_length=16, unique=True, primary_key=True)
-    roomName = models.CharField(max_length=255)
-    members = models.ManyToManyField(User, related_name='rooms')
-
-
 class Message(models.Model):
 
     MESSAGE_STATUS = [
@@ -17,8 +11,8 @@ class Message(models.Model):
     ]
 
     messageId = models.CharField(max_length=255, unique=True, primary_key=True)
-    receiverId = models.ForeignKey(max_length=255, to=User, on_delete=models.CASCADE)
-    senderId = models.ForeignKey(max_length=255, to=User, on_delete=models.CASCADE)
+    receiverId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    senderId = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     content = models.TextField()
     mediaUrl = models.URLField(blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -27,7 +21,7 @@ class Message(models.Model):
     lastTriedAt = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"Message {self.messageId} from {self.senderId} to {self.receiverId}"
+        return f"Message {self.messageId} from {self.sender} to {self.receiver}"
     
     class Meta:
         ordering = ['-timestamp']
