@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import User
+from .models import AsynkUser
 import string
 from django.utils.crypto import get_random_string
 
 # General serializer for user data
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = AsynkUser
         fields = ['username', 'email', 'password', 'contact']
 
 # Serializes information in database to be used during user creation
@@ -15,7 +15,7 @@ class SignupSerializer(serializers.ModelSerializer):
 
     # Check if entered email is already in use
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        if AsynkUser.objects.filter(email=value).exists():
             raise serializers.ValidationError('Account already exists with this email')
         return value
     
@@ -29,13 +29,13 @@ class SignupSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password2')
         password = validated_data.pop('password')
-        user = User(**validated_data)
+        user = AsynkUser(**validated_data)
         # create function to add the password
         user.save()
         return user
     
     class Meta:
-        model = User
+        model = AsynkUser
         fields = ['username', 'email', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}

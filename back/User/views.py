@@ -2,9 +2,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .serializers import UserSerializer
-from .models import User
-from rest_framework.permissions import AllowAny
+from .models import AsynkUser
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post (self, request, *args, **kwargs):
@@ -59,8 +60,17 @@ class CustomTokenRefreshView(TokenRefreshView):
             return res
         except Exception as e:
             return Response({'tokenRefreshed': False, 'error': str(e)}, status=400)
+        
+class CookieJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        raw_token = request.COOKIES.get('access_token')
+        if raw_token is None:
+            return super().authenticate(request)
+        validated_token = self.get_validated_token(raw_token)
+        return self.get_user(validated_token), validated_token
 
 class UserViewSet(ModelViewSet):
-    queryset = User.objects.prefetch_related('users')
+    queryset = AsynkUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+    authentication_classes = [CookieJWTAuthentication]

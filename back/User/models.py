@@ -1,15 +1,18 @@
 from django.db import models
 import uuid
 import random
+from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
-class User(models.Model):
+class AsynkUser(AbstractUser):
     userId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    username = models.CharField(max_length=255)
+    username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255, null=True, blank=True)
     contact = models.CharField(max_length=9, default=None, editable=False, unique=True)
     createdAt = models.DateTimeField(auto_now_add=True)
+    #owned_rooms = 
+    #memberships = 
 
     @classmethod
     def generate_contact(cls, field_name='contact'):
