@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .serializers import UserSerializer
+from .serializers import SignupSerializer, UserSerializer
 from .models import AsynkUser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
@@ -71,6 +71,11 @@ class CookieJWTAuthentication(JWTAuthentication):
 
 class UserViewSet(ModelViewSet):
     queryset = AsynkUser.objects.all()
-    serializer_class = UserSerializer
     permission_classes = [AllowAny]
     authentication_classes = [CookieJWTAuthentication]
+
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return SignupSerializer
+        return UserSerializer
+    

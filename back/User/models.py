@@ -5,10 +5,9 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class AsynkUser(AbstractUser):
-    userId = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=255, unique=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=255, null=True, blank=True)
     contact = models.CharField(max_length=9, default=None, editable=False, unique=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     #owned_rooms = 

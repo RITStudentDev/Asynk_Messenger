@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import AsynkUser
-import string
-from django.utils.crypto import get_random_string
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # General serializer for user data
 class UserSerializer(serializers.ModelSerializer):
@@ -23,6 +23,10 @@ class SignupSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['password'] != data['password2']:
             raise serializers.ValidationError({'password2': 'Passwords do not match'})
+        try:
+            validate_password(data['password'])
+        except ValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
         return data
 
     # Add new user to database
@@ -30,7 +34,7 @@ class SignupSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         password = validated_data.pop('password')
         user = AsynkUser(**validated_data)
-        # create function to add the password
+        user.set_password(password)
         user.save()
         return user
     
