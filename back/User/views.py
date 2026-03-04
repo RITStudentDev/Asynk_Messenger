@@ -71,11 +71,32 @@ class CookieJWTAuthentication(JWTAuthentication):
 
 class UserViewSet(ModelViewSet):
     queryset = AsynkUser.objects.all()
-    permission_classes = [AllowAny]
     authentication_classes = [CookieJWTAuthentication]
 
+    # Use signup serializer only on user creation and user serializer everywhere else
     def get_serializer_class(self):
         if self.action == 'create':
             return SignupSerializer
         return UserSerializer
+    
+    # Use authentication everywhere except user creation
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+    
+    # Sets queryset to fetch data for only the authenticated user
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return AsynkUser.objects.filter(id=self.request.user.id)
+        return AsynkUser.objects.none()
+    
+    # implement function to get all data on a user
+    def retrieve(self, request, pk=None):
+        user = request.user
+        serializer = self.get_serializer(user)
+
+        return Response(serializer.data)
+    
+
     
