@@ -1,12 +1,9 @@
-html, body {
-  margin: 0;
-  padding: 0;
-}
 
 .sidebar {
     display: flex;
+    width: fit-content;
     min-height: 100vh;
-    min-height: 100dvh;
+    min-height: 100vh;
     padding: 18px;
     flex-direction: column;
     background-color: #1c1d22;

@@ -8,9 +8,16 @@ h2 {
 }
 
 .signup-box {
-    width: 160px;
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
     padding: 10px 40px 30px 40px;
     background-color: var(--ui-main-);
+}
+
+.signup-box form button {
+    display: block;
+    width: 100%;
 }
 
 button {

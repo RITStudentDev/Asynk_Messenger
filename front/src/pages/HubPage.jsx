@@ -1,3 +1,5 @@
+import "../styles/HubPage.css"
+
 import HubSideBar from "../components/HubSideBar"
 import RoomProfile from "../components/RoomProfile"
 
