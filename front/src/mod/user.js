@@ -1,6 +1,7 @@
 export async function login (username, password){
 
-    //const BASE_URL = 'http://localhost:8000/' CXf25nXw
+    //const BASE_URL = 'http://localhost:8000/' 
+    // CXf25nXw
 
     try {
         const response = await fetch( "http://localhost:8000/api/token/", {
