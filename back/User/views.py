@@ -22,8 +22,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 key='access_token',
                 value=access_token,
                 httponly=True,
-                secure=True,
-                samesite='None', 
+                secure=False,
+                samesite='Lax', 
                 path='/',
             )
 
@@ -31,8 +31,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 key='refresh_token',
                 value=refresh_token,
                 httponly=True,
-                secure=True,
-                samesite='None',
+                secure=False,
+                samesite='Lax',
                 path='/',
             )
             return res
@@ -81,7 +81,7 @@ class UserViewSet(ModelViewSet):
     
     # Use authentication everywhere except user creation
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action in ['create', 'login']:
             return [AllowAny()]
         return [IsAuthenticated()]
     

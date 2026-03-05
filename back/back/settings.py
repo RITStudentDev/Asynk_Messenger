@@ -163,6 +163,13 @@ CORS_ALLOWED_ORIGINS = [
     # add web urls once made
     "http://localhost:8080",
     "http://127.0.0.1:9000",
+    "http://localhost:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
 ]
 
 REST_FRAMEWORK = {
