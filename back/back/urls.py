@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import include, path
 #from django.contrib.auth.models import 
 from rest_framework import routers
-from User.views import UserViewSet
+from User.views import UserViewSet, CustomTokenObtainPairView, CustomTokenRefreshView
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -27,6 +27,9 @@ urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('messages/', include('Messaging.urls')),
+
+    path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 urlpatterns += router.urls

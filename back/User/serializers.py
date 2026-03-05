@@ -1,12 +1,12 @@
 from rest_framework import serializers
-from .models import User
-import string
-from django.utils.crypto import get_random_string
+from .models import AsynkUser
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 
 # General serializer for user data
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = AsynkUser
         fields = ['username', 'email', 'password', 'contact']
 
 # Serializes information in database to be used during user creation
@@ -15,7 +15,7 @@ class SignupSerializer(serializers.ModelSerializer):
 
     # Check if entered email is already in use
     def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
+        if AsynkUser.objects.filter(email=value).exists():
             raise serializers.ValidationError('Account already exists with this email')
         return value
     
@@ -23,19 +23,23 @@ class SignupSerializer(serializers.ModelSerializer):
     def validate(self, data):
         if data['password'] != data['password2']:
             raise serializers.ValidationError({'password2': 'Passwords do not match'})
+        try:
+            validate_password(data['password'])
+        except ValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
         return data
 
     # Add new user to database
     def create(self, validated_data):
         validated_data.pop('password2')
         password = validated_data.pop('password')
-        user = User(**validated_data)
-        # create function to add the password
+        user = AsynkUser(**validated_data)
+        user.set_password(password)
         user.save()
         return user
     
     class Meta:
-        model = User
+        model = AsynkUser
         fields = ['username', 'email', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}

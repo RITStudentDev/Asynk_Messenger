@@ -163,11 +163,18 @@ CORS_ALLOWED_ORIGINS = [
     # add web urls once made
     "http://localhost:8080",
     "http://127.0.0.1:9000",
+    "http://localhost:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -175,3 +182,4 @@ REST_FRAMEWORK = {
     ]
 }
 
+AUTH_USER_MODEL = 'User.AsynkUser'

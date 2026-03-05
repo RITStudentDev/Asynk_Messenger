@@ -1,16 +1,49 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../styles/Signup.css'
 import TextInput from './TextInput.jsx'
+import { login } from '../mod/user.js'
 
 function Login (){
     
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState(null)
+    const [message, setMessage] = useState(null)
+    const navigate = useNavigate()
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        setError(null)
+        setMessage(null)
+
+        try {
+            await login(username, password)
+            navigate("/hub")
+            setMessage("Login successful")
+        } catch (err) {
+            setError(err?.message || "Login failed")
+        }
+    }
+
     return(
         <div className="signup-box">
             <form onSubmit={handleSubmit}>
                 <h2>Login</h2>
-                <TextInput placeholder="Username" type="username"/>
+                <TextInput 
+                    placeholder="Username" 
+                    type="username" 
+                    value={username} 
+                    onChange={(e) => setUsername(e.target.value)}
+                />
                 <br/>
-                <TextInput placeholder="Password" type="password"/>
+                <TextInput 
+                    placeholder="Password" 
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
                 <a href="#" className="login">Don't have an account</a>
                 <button type='submit'>Login</button>
                 {error && <p>{error}</p>}
