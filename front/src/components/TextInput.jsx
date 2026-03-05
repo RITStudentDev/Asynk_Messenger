@@ -1,14 +1,14 @@
 import '../styles/TextInput.css'
 import { useState } from 'react'
 
-function TextInput(props){
+function TextInput({ placeholder, type, value, onChange }){
     const [focused, setFocused] = useState(false)
     const [filled, setFilled] = useState(false)
 
     const handleFocus = () => { setFocused(true) }
     const handleBlur = () => { setFocused(false) }
     const handleInput = (e) => {
-        if (e.length > 0){
+        if (e.target.value.length > 0){
             setFilled(true)
         }
         else {setFilled(false)}
@@ -19,8 +19,10 @@ function TextInput(props){
             <div className={`focus-bar ${(focused || filled) ? "active" : ""}`}></div>
 
             <input
-                placeholder={props.placeholder}
-                type={props.type}
+                placeholder={placeholder}
+                type={type}
+                value={value}
+                onChange={onChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onInput={handleInput}
