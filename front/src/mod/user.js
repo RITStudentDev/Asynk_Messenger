@@ -4,7 +4,7 @@ export async function login (username, password){
     // CXf25nXw
 
     try {
-        const response = await fetch( `${BASE_URL}api/token/`, {
+        const response = await fetch( `${BASE_URL}users/login/`, {
             method: "POST",
             headers: {
                 "Content-Type" : "application/json",
@@ -12,7 +12,7 @@ export async function login (username, password){
             credentials: "include",
             body: JSON.stringify({
                 username: username,
-                password: password,
+                password: password
             }),
         });
 
@@ -30,5 +30,14 @@ export async function login (username, password){
 }
 
 export async function get_logged_user(){
-
+    try {
+        const response = await fetch( `${BASE_URL}users/me`, {
+            credentials: "include",
+            headers: {
+                Authorization : `Bearer ${accessToken}`
+            }
+        })
+    } catch (err) {
+        console.log(err)
+    }
 }

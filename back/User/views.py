@@ -1,24 +1,39 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .serializers import SignupSerializer, UserSerializer
 from .models import AsynkUser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    def post (self, request, *args, **kwargs):
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
+        
+class CookieJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        raw_token = request.COOKIES.get('access_token')
+        if raw_token is None:
+            return None
         try:
-            response = super().post(request, *args, **kwargs)
-            tokens = response.data
-            access_token = tokens.get('access')
-            refresh_token = tokens.get('refresh')
+            validated_token = self.get_validated_token(raw_token)
+        except:
+            return None
+        
+        return self.get_user(validated_token), validated_token
 
-            res = Response()
-            res.data = {'tokenGenerated': True}
+class UserViewSet(ModelViewSet):
+    queryset = AsynkUser.objects.all()
+    authentication_classes = [CookieJWTAuthentication]
 
-            res.set_cookie(
+    @action(detail=False, methods=["post"])
+    def login(self, request):
+        serializer = TokenObtainPairSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        access_token = serializer.validated_data['access']
+        refresh_token = serializer.validated_data['refresh']
+
+        res = Response({'tokenGenerated': True})
+
+        res.set_cookie(
                 key='access_token',
                 value=access_token,
                 httponly=True,
@@ -27,29 +42,32 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 path='/',
             )
 
-            res.set_cookie(
-                key='refresh_token',
-                value=refresh_token,
-                httponly=True,
-                secure=False,
-                samesite='Lax',
-                path='/',
-            )
-            return res
-        except Exception as e:
-            return Response({'tokenGenerated': False, 'error': str(e)}, status=400)
+        res.set_cookie(
+            key='refresh_token',
+            value=refresh_token,
+            httponly=True,
+            secure=False,
+            samesite='Lax',
+            path='/',
+        )
 
-class CustomTokenRefreshView(TokenRefreshView):
-    def post(self, request, *args, **kwargs):
-        try:
-            response = super().post(request, *args, **kwargs)
-            tokens = response.data
-            access_token = tokens['access']
+        serializer.is_valid()
+        print(serializer.errors)
 
-            res = Response()
-            res.data = {'tokenRefreshed': True}
+        return res
 
-            res.set_cookie(
+    @action(detail=False, methods=['post'])
+    def refresh(self, request):
+
+        refresh_token = request.COOKIES.get('refresh_token')
+
+        serializer = TokenRefreshSerializer(data={'refresh': refresh_token})
+        serializer.is_valid(raise_exception=True)
+
+        access_token = serializer.validated_data['access']
+        res = Response({'tokenRefreshed': True})
+
+        res.set_cookie(
                 key='access_token',
                 value=access_token,
                 httponly=True,
@@ -57,22 +75,8 @@ class CustomTokenRefreshView(TokenRefreshView):
                 samesite='None',
                 path='/',
             )
-            return res
-        except Exception as e:
-            return Response({'tokenRefreshed': False, 'error': str(e)}, status=400)
-        
-class CookieJWTAuthentication(JWTAuthentication):
-    def authenticate(self, request):
-        raw_token = request.COOKIES.get('access_token')
-        if raw_token is None:
-            return super().authenticate(request)
-        validated_token = self.get_validated_token(raw_token)
-        return self.get_user(validated_token), validated_token
-
-class UserViewSet(ModelViewSet):
-    queryset = AsynkUser.objects.all()
-    authentication_classes = [CookieJWTAuthentication]
-
+        return res
+    
     # Use signup serializer only on user creation and user serializer everywhere else
     def get_serializer_class(self):
         if self.action == 'create':
@@ -81,7 +85,7 @@ class UserViewSet(ModelViewSet):
     
     # Use authentication everywhere except user creation
     def get_permissions(self):
-        if self.action in ['create', 'login']:
+        if self.action in ['create', 'login', 'refresh']:
             return [AllowAny()]
         return [IsAuthenticated()]
     
@@ -90,12 +94,11 @@ class UserViewSet(ModelViewSet):
         if self.request.user.is_authenticated:
             return AsynkUser.objects.filter(id=self.request.user.id)
         return AsynkUser.objects.none()
-    
-    # implement function to get all data on a user
-    def retrieve(self, request, pk=None):
-        user = request.user
-        serializer = self.get_serializer(user)
 
+    # Gets authenticated user on device
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        serializer = self.get_serializer(request.user)
         return Response(serializer.data)
     
 
