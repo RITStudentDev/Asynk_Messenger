@@ -3,12 +3,12 @@
     display: flex;
     width: fit-content;
     min-height: 100vh;
-    min-height: 100vh;
     padding: 18px;
     flex-direction: column;
     background-color: #1c1d22;
     border: solid 2px #3d3d45;
     align-items: flex-start;
+    margin-right: 17px;
 }
 
 ul {
