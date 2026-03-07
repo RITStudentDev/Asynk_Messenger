@@ -8,10 +8,23 @@ function HubPage (){
     return(
         <div className="page">
             <HubSideBar/>
-            <div className="room-container">
-                <RoomProfile/>
-                <RoomProfile/>
-                <RoomProfile/>
+            <div className="main-view">
+                <div className="head-bar">
+                    <button>+</button>
+                    <button>F</button>
+                    <input
+                        placeholder="Search"
+                    ></input>
+                    <button>Me</button>
+                </div>
+                <div className="room-container">
+                    <RoomProfile/>
+                    <RoomProfile/>
+                    <RoomProfile/>
+                    <RoomProfile/>
+                    <RoomProfile/>
+                    <RoomProfile/>
+                </div>
             </div>
         </div>
     )
