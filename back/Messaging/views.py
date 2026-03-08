@@ -1,7 +1,10 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from .serializers import MessageSerializer
+from .serializers import MessageSerializer, RoomSerializer, RoomMembershipSerializer
+from .models import Room
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Q
 from django_q.tasks import async_task
 import uuid
 
@@ -37,6 +40,13 @@ class MessageViewSet(viewsets.ViewSet):
         return Response({'message': list(messages)})
     
     class RoomViewSet(viewsets.ViewSet):
+        permission_classes = [IsAuthenticated]
 
-        def create():
-            pass
+        def create(self, request):
+            serializer = RoomSerializer(data=request.data, context={'request': request})
+            if serializer.is_valid():
+                room = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        
+        # next implement function to get rooms from user
