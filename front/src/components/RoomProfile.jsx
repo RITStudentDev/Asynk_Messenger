@@ -1,9 +1,9 @@
 import '../styles/RoomProfile.css'
 import icon from '../assets/defaultRoom.png'
 
-function RoomProfile() {
+function RoomProfile({roomName}) {
     // change later with actaul values
-    const roomName = 'Room Name';
+    //const roomName = 'Room Name';
   return (
     <div className="room-profile-container">
         <div id='name-container'>
