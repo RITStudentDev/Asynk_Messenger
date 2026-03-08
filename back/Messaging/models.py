@@ -9,7 +9,7 @@ class Message(models.Model):
         ('failed', 'Failed'),
     ]
 
-    messageId = models.UUIDField(max_length=255, unique=True, primary_key=True)
+    messageId = models.UUIDField(unique=True, primary_key=True)
     receiverId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
     senderId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
     content = models.TextField()
@@ -20,7 +20,7 @@ class Message(models.Model):
     lastTriedAt = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return f"Message {self.messageId} from {self.sender} to {self.receiver}"
+        return f"Message {self.messageId} from {self.senderId} to {self.receiverId }"
     
     class Meta:
         ordering = ['-timestamp']

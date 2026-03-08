@@ -36,8 +36,17 @@ export async function get_logged_user(){
             headers: {
                 Authorization : `Bearer ${accessToken}`
             }
-        })
+        });
+
+        if (!response.ok){
+            throw new Error("Failed to fetch user");
+        }
+
+        const data = await response.json();
+        return data;
+
     } catch (err) {
-        console.log(err)
+        console.log(err);
+        return null
     }
 }

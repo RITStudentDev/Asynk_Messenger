@@ -1,7 +1,8 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('messages/send/', views.send_message, name='send_message'),
-    path('messages/', views.get_messages, name='get_messages'),
-    ]
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
