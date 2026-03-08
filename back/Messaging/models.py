@@ -31,7 +31,7 @@ class Message(models.Model):
 
     
 class Room(models.Model):
-    roomId = models.CharField(primary_key=True, unique=True, max_length=16)
+    roomId = models.CharField(primary_key=True, max_length=16)
     roomName = models.CharField(max_length=50)
     icon = models.URLField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True )
@@ -43,12 +43,11 @@ class Room(models.Model):
         ordering = ['-timeCreated']      
 
     def __str__(self):
-        return f'{self.name} ({self.roomId})' 
+        return f'{self.roomName} ({self.roomId})' 
     
 class RoomMembership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name='memberships')
-    joined_at = models.DateTimeField(auto_now_add=True)
+    ROLE_CHOICES = [('memebr', 'Member'), ('admin', 'Admin')]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='member')
 
     class Meta:
         unique_together = ('user', 'room')
