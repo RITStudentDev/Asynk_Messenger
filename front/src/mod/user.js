@@ -50,3 +50,16 @@ export async function get_logged_user(){
         return null
     }
 }
+
+export async function get_memberships(){
+    try{
+        const response = await fetch(`${BASE_URL}rooms/`, {
+            method: 'GET',
+            credentials: 'include'
+        });
+        const data = await response.json()
+        return data.rooms;
+    } catch (err){
+        throw err;
+    }
+}

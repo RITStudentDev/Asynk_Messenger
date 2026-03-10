@@ -1,7 +1,7 @@
 import '../styles/RoomProfile.css'
 import icon from '../assets/defaultRoom.png'
 
-function RoomProfile({roomName}) {
+function RoomProfile({roomName, bio}) {
     // change later with actaul values
     //const roomName = 'Room Name';
   return (
@@ -11,7 +11,7 @@ function RoomProfile({roomName}) {
         </div>
         <img src={icon} alt='icon'/>
         <div className='bio-container'>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Explicabo exercitationem quas repellendus earum? Corrupti tempore maxime, ratione ea, ab, in aliquam aspernatur amet tenetur veritatis velit nostrum accusamus aperiam reiciendis.</p>
+            <p>{bio}</p>
         </div>
     </div>
   );
