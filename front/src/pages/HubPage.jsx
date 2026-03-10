@@ -1,5 +1,5 @@
 import "../styles/HubPage.css"
-
+import { useState, useEffect } from "react"
 import HubSideBar from "../components/HubSideBar"
 import RoomProfile from "../components/RoomProfile"
 
@@ -7,8 +7,16 @@ import { get_memberships } from "../mod/user"
 
 function HubPage (){
 
+    const [rooms, setRooms ] = useState([])
+
     // change this to api fetch for looged user rooms
-    const rooms = get_memberships()
+    useEffect(() => {
+        const fetchRooms = async () => {
+            const rooms = await get_memberships()
+            setRooms(rooms)
+        }
+        fetchRooms()
+    }, [])
 
 
     return(
@@ -25,7 +33,7 @@ function HubPage (){
                 </div>
                 <div className="room-container">
                     {rooms.map((room) => (
-                        <RoomProfile key={room.id} roomName={room.name}/>
+                        <RoomProfile key={room.roomId} roomName={room.roomName} bio={room.bio}/>
                     ))}
                 </div>
             </div>

@@ -1,6 +1,6 @@
-export async function login (username, password){
+const BASE_URL = "http://localhost:8000/" 
 
-    const BASE_URL = "http://localhost:8000/" 
+export async function login (username, password){
     // CXf25nXw
 
     try {
@@ -52,6 +52,9 @@ export async function get_logged_user(){
 }
 
 export async function get_memberships(){
+
+
+
     try{
         const response = await fetch(`${BASE_URL}rooms/`, {
             method: 'GET',
