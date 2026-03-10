@@ -56,8 +56,10 @@ class RoomViewSet(viewsets.ViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     # GET /rooms/
-    def list():
-        pass
+    def list(self, request):
+        rooms = Room.objects.filter(members=request.user)
+        serializer = RoomSerializer(rooms, many=True)
+        return Response({'rooms': serializer.data})
 
     # GET /rooms/{roomId}
     def retrieve(self, request, pk=None):
