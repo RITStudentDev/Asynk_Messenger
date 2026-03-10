@@ -55,6 +55,10 @@ class RoomViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    # GET /rooms/
+    def list():
+        pass
+
     # GET /rooms/{roomId}
     def retrieve(self, request, pk=None):
         try:

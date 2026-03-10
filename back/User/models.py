@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 import random
 from django.contrib.auth.models import AbstractUser
+from django.contrib.postgres.fields import ArrayField
 
 # at some point set default contact to generate contact value
 class AsynkUser(AbstractUser):
@@ -11,7 +12,7 @@ class AsynkUser(AbstractUser):
     contact = models.CharField(max_length=9, default=None, editable=False, unique=True)
     createdAt = models.DateTimeField(auto_now_add=True)
     #owned_rooms = 
-    #memberships = 
+    memberships = ArrayField(models.IntegerField(), default=list, blank=True)
 
     @classmethod
     def generate_contact(cls, field_name='contact'):
