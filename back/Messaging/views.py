@@ -2,8 +2,9 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import MessageSerializer, RoomSerializer, RoomMembershipSerializer
-from .models import Room
+from .models import Room, Message
 from rest_framework.permissions import IsAuthenticated
+from User.views import CookieJWTAuthentication
 from django_q.tasks import async_task
 import uuid
 
@@ -11,9 +12,12 @@ from .models import Message
 from .tasks import process_pending_messages 
 
 class MessageViewSet(viewsets.ViewSet):
+    queryset = Message.objects.all()
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CookieJWTAuthentication]
         
     def create(self, request):
-        serializer = MessageSerializer
+        serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             message = serializer.save(messageId=uuid.uuid4())
             task_id = async_task(process_pending_messages, message.messageId)
@@ -38,43 +42,45 @@ class MessageViewSet(viewsets.ViewSet):
         serializer = MessageSerializer(messages, many=True)
         return Response({'message': list(messages)})
     
-    class RoomViewSet(viewsets.ViewSet):
-        permission_classes = [IsAuthenticated]
-        
-        # POST /rooms/
-        def create(self, request):
-            serializer = RoomSerializer(data=request.data, context={'request': request})
-            if serializer.is_valid():
-                room = serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        # GET /rooms/{roomId}
-        def retrieve(self, request, pk=None):
-            try:
-                room=Room.objects.get(roomId=pk)
-            except Room.DoesNotExist:
-                return Response({'error': 'Room not does not exist'}, status=status.HTTP_404_NOT_FOUND)
-            
-            if not room.members.filter(id=request.user.id).exists():
-                return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
-            
-            serializer = RoomSerializer(room)
-            return Response(serializer.data)
-        
-        # GET /rooms/{roomId}/messages/
-        @action(detail=True, methods=['get'], url_path='messages')
-        def get_room_messages(self, request, pk=None):
-            try:
-                room=Room.objects.get(roomId=pk)
-            except Room.DoesNotExist:
-                return Response({'error': 'Room not does not exist'}, status=status.HTTP_404_NOT_FOUND)
-            
-            if not room.members.filter(id=request.user.id).exists():
-                return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
-            
-            messages = Message.objects.filter(roomId=pk).order_by('timestamp')
-            serializer = MessageSerializer(messages, many=True)
-            return Response({'messages': serializer.data})
-            
+class RoomViewSet(viewsets.ViewSet):
+    queryset = Room.objects.all()
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [CookieJWTAuthentication]
     
+    # POST /rooms/
+    def create(self, request):
+        serializer = RoomSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            room = serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    # GET /rooms/{roomId}
+    def retrieve(self, request, pk=None):
+        try:
+            room=Room.objects.get(roomId=pk)
+        except Room.DoesNotExist:
+            return Response({'error': 'Room not does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if not room.members.filter(id=request.user.id).exists():
+            return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
+        
+        serializer = RoomSerializer(room)
+        return Response(serializer.data)
+    
+    # GET /rooms/{roomId}/messages/
+    @action(detail=True, methods=['get'], url_path='messages')
+    def get_room_messages(self, request, pk=None):
+        try:
+            room=Room.objects.get(roomId=pk)
+        except Room.DoesNotExist:
+            return Response({'error': 'Room not does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if not room.members.filter(id=request.user.id).exists():
+            return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
+        
+        messages = Message.objects.filter(roomId=pk).order_by('timestamp')
+        serializer = MessageSerializer(messages, many=True)
+        return Response({'messages': serializer.data})
+        
+

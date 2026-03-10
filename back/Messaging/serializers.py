@@ -21,6 +21,12 @@ class RoomSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(read_only=True)
     member_count = serializers.SerializerMethodField()
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        room = Room.objects.create(owner=request.user, **validated_data)
+        RoomMembership.objects.create(user=request.user, room=room)
+        return room
+
     class Meta:
         model = Room
         fields = ['roomId', 'roomId', 'icon', 'bio', 'owner', 'members', 'member_count', 'timeCreated']

@@ -3,7 +3,7 @@ import uuid
 import random
 from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+# at some point set default contact to generate contact value
 class AsynkUser(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=255, unique=True)
@@ -15,7 +15,7 @@ class AsynkUser(AbstractUser):
 
     @classmethod
     def generate_contact(cls, field_name='contact'):
-        while (True):
+        while True:
             num = f"{random.randint(0, 999999999):09d}"
             if not cls.objects.filter(**{field_name: num}).exists():
                 return num

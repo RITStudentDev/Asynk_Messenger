@@ -19,14 +19,16 @@ from django.urls import include, path
 #from django.contrib.auth.models import 
 from rest_framework import routers
 from User.views import UserViewSet
+from Messaging.views import MessageViewSet, RoomViewSet
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
+router.register(r'messages', MessageViewSet)
+router.register(r'rooms', RoomViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('messages/', include('Messaging.urls'))
 ]
 
 urlpatterns += router.urls
