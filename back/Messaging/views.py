@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import MessageSerializer, RoomSerializer, RoomMembershipSerializer
-from .models import Room, Message
+from .models import Room, Message, RoomMembership
 from rest_framework.permissions import IsAuthenticated
 from User.views import CookieJWTAuthentication
 from django_q.tasks import async_task
@@ -84,5 +84,17 @@ class RoomViewSet(viewsets.ViewSet):
         messages = Message.objects.filter(room=pk).order_by('timestamp')
         serializer = MessageSerializer(messages, many=True)
         return Response({'messages': serializer.data})
-        
 
+    # POST /rooms/{roomId}/join/  
+    @action(detail=True, methods=['post'], url_path='join')
+    def join(self, request, pk=None):
+        try:
+            room = Room.objects.get(roomId=pk)
+        except Room.DoesNotExist:
+            return Response({'error': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        if room.members.filter(id=request.user.id).exists():
+            return Response({'error': 'You are already a member of this room'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        RoomMembership.objects.create(user=request.user, room=room)
+        return Response({'success': True}, status=status.HTTP_201_CREATED)
