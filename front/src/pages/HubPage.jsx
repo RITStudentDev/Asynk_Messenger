@@ -33,7 +33,7 @@ function HubPage (){
                 </div>
                 <div className="room-container">
                     {rooms.map((room) => (
-                        <RoomProfile key={room.roomId} roomName={room.roomName} bio={room.bio}/>
+                        <RoomProfile key={room.roomId} roomId={room.roomId} roomName={room.roomName} bio={room.bio}/>
                     ))}
                 </div>
             </div>
