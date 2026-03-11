@@ -3,9 +3,11 @@ from .models import Message, Room, RoomMembership
 
 class MessageSerializer(serializers.ModelSerializer):
 
+    sender_username = serializers.CharField(source='senderId.username', read_only=True)
+
     class Meta:
         model = Message
-        fields = ['messageId', 'senderId', 'receiverId', 'room', 'content', 'timestamp', 'status']
+        fields = ['messageId', 'senderId', 'sender_username', 'receiverId', 'room', 'content', 'timestamp', 'status']
         read_only_fields = ['messageId', 'timestamp', 'status', 'senderId']
 
 class RoomMembershipSerializer(serializers.ModelSerializer):

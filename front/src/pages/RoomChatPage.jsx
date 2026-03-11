@@ -1,7 +1,11 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { useParams } from 'react-router-dom';
 
+import '../styles/RoomChatPage.css'
+
 import ChatInput from '../components/ChatInput';
+import HubSideBar from '../components/HubSideBar'
+import Message from '../components/Message';
 
 function ServerChatPage (){
 
@@ -44,17 +48,25 @@ function ServerChatPage (){
     }, [roomId])
         
     return (
-        <>
-            <h3>Connected: {roomId}</h3>
-            <div>
-                <ul>
-                    {messages.map((message, index) => (
-                        <li key={index}>{message.content}</li>
-                    ))}
-                </ul>
+        <div className='chat-page'>
+            <HubSideBar/>
+            <div className='chat-view'>
+                <h3>Connected: {roomId}</h3>
+                <div>
+                    <ul>
+                        {messages.map((message, index) => (
+                            <Message
+                                key={index}
+                                username={message.sender_username}
+                                content={message.content}
+                                timestamp={message.timestamp}
+                            />
+                        ))}
+                    </ul>
+                </div>
+                <ChatInput ws={ws} roomId={roomId}/>
             </div>
-            <ChatInput ws={ws} roomId={roomId}/>
-        </>
+        </div>
     )
 }
 

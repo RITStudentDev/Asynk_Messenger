@@ -20,7 +20,7 @@ h2 {
     width: 100%;
 }
 
-button {
+.submit-button {
     margin-top: 8px;
     background-color: #3ea4db;
     border-radius: 0px;

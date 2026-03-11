@@ -1,0 +1,28 @@
+.message-container {
+    display: flex;
+    width: 100%;
+}
+
+.content-container {
+    padding: 18px 18px 18px 9px;
+}
+
+.pfp {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    padding: 0px;
+}
+
+.message-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.message-meta p {
+    opacity: 60%;
+}

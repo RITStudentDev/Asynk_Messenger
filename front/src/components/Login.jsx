@@ -48,7 +48,7 @@ function Login (){
                     <a href="#" className="login">Don't have an account</a>
                 </div>
                 <div>
-                    <button type='submit'>Login</button>
+                    <button className="submit-button" type='submit'>Login</button>
                 </div>
                 {error && <p>{error}</p>}
                 {error && <p>{message}</p>}
