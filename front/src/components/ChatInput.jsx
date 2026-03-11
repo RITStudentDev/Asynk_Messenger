@@ -20,7 +20,7 @@ function ChatInput({ws, roomId}) {
         })
         setContent('')
     }
-    
+
     return (
         <div>
             <input

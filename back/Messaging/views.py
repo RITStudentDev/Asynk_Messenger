@@ -37,6 +37,7 @@ class MessageViewSet(viewsets.ViewSet):
         serializer = MessageSerializer(messages, many=True)
         return Response({'message': list(messages)})
     
+    
 class RoomViewSet(viewsets.ViewSet):
     queryset = Room.objects.all()
     permission_classes = [IsAuthenticated]
@@ -80,7 +81,7 @@ class RoomViewSet(viewsets.ViewSet):
         if not room.members.filter(id=request.user.id).exists():
             return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
         
-        messages = Message.objects.filter(roomId=pk).order_by('timestamp')
+        messages = Message.objects.filter(room=pk).order_by('timestamp')
         serializer = MessageSerializer(messages, many=True)
         return Response({'messages': serializer.data})
         
