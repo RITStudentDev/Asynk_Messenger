@@ -1,15 +1,30 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
 
 function ChatInput({ws, roomId}) {
     const [content, setContent] = useState('')
+    const [currentUser, setCurrentUser] = useState(null)
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetch('http://localhost:8000/users/me/', {
+                credentials: 'include'
+            })
+            const data = await response.json()
+            setCurrentUser(data)
+        }
+        fetchUser()
+    }, [])
 
     const sendMessage = async () => {
-      if (!content) return;
+        if (!content) return
 
-      ws.current.send(JSON.stringify({message: content}))
+        ws.current.send(JSON.stringify({
+            message: content,
+            sender_username: currentUser?.username,
+            timestamp: new Date().toISOString()
+        }))
 
-        const response = await fetch('http://localhost:8000/messages/', {
+        await fetch('http://localhost:8000/messages/', {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
@@ -18,6 +33,7 @@ function ChatInput({ws, roomId}) {
                 content: content
             })
         })
+
         setContent('')
     }
 

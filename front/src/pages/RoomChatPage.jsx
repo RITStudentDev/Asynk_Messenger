@@ -22,7 +22,12 @@ function ServerChatPage (){
 
         ws.current.onmessage = (event) => {
             const data = JSON.parse(event.data)
-            setMessages(prev => [...prev, { content: data.message }])
+            setMessages(prev => [...prev, {
+                content: data.content,
+                sender_username: data.sender_username,
+                timestamp: data.timestamp
+
+            }])
         };
 
         ws.current.onclose = () => {
