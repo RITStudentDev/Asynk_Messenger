@@ -20,6 +20,7 @@ class MessageViewSet(viewsets.ViewSet):
         serializer = MessageSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             message = serializer.save(senderId=request.user)
+            task_id = async_task(process_pending_messages, message.messageId)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
