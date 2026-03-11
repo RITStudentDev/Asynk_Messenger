@@ -5,12 +5,12 @@ import ChatInput from '../components/ChatInput';
 
 function ServerChatPage (){
 
-        const {roomName} = useParams();
+        const {roomId} = useParams();
         const [messages, setMessages] = useState([]);
         const ws = useRef(null)
 
         useEffect(() => {
-            ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomName}/`)
+            ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomId}/`)
 
             ws.current.onopen = () => {
                 console.log("WebSocket connected")
@@ -22,27 +22,28 @@ function ServerChatPage (){
                 setMessages(prev => [...prev, data.message]);
             };
 
-            ws.onclose = () => {
+            ws.current.onclose = () => {
                 console.log('WebSocket disconnected')
             }
 
-            ws.onerror = (err) => {
+            ws.current.onerror = (err) => {
                 console.error('WebSocket error: ', err);
             };
 
             return () => ws.current.close();
-        }, [roomName]);
+        }, [roomId]);
     return (
         <>
-            <h3>Connected: {roomName}</h3>
+            <h3>Connected: {roomId}</h3>
             <div>
                 <ul>
-                    <li>Test message</li>
+                    {messages.map((message, index) => (
+                        <li key={index}>{message}</li>
+                    ))}
                 </ul>
             </div>
-            <ChatInput/>
+            <ChatInput ws={ws} roomId={roomId}/>
         </>
-        
     )
 }
 

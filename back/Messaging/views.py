@@ -17,15 +17,10 @@ class MessageViewSet(viewsets.ViewSet):
     authentication_classes = [CookieJWTAuthentication]
         
     def create(self, request):
-        serializer = MessageSerializer(data=request.data)
+        serializer = MessageSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            message = serializer.save(messageId=uuid.uuid4())
-            task_id = async_task(process_pending_messages, message.messageId)
-            return Response(
-                {'success': True, 'messageId': message.messageId, 'taskId': task_id},
-                status=status.HTTP_201_CREATED
-            )
-
+            message = serializer.save(senderId=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

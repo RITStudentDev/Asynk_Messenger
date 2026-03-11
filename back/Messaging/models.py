@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 import random
 import time
+import uuid
 
 class Message(models.Model):
 
@@ -12,8 +13,9 @@ class Message(models.Model):
         ('failed', 'Failed'),
     ]
 
-    messageId = models.UUIDField(unique=True, primary_key=True)
-    receiverId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages')
+    messageId = models.UUIDField(unique=True, primary_key=True, default=uuid.uuid4)
+    room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='messages', null=True, blank=True)
+    receiverId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='received_messages', null=True, blank=True)
     senderId = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='sent_messages')
     content = models.TextField()
     mediaUrl = models.URLField(blank=True, null=True)
