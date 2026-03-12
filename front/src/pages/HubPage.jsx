@@ -2,12 +2,14 @@ import "../styles/HubPage.css"
 import { useState, useEffect } from "react"
 import HubSideBar from "../components/HubSideBar"
 import RoomProfile from "../components/RoomProfile"
+import { useNavigate } from "react-router-dom"
 
 import { get_memberships } from "../mod/user"
 
 function HubPage (){
 
     const [rooms, setRooms ] = useState([])
+    const navigate = useNavigate()
 
     // change this to api fetch for looged user rooms
     useEffect(() => {
@@ -18,13 +20,16 @@ function HubPage (){
         fetchRooms()
     }, [])
 
+    const handleCRRoute  = () => {
+        navigate('createroom')
+    }
 
     return(
         <div className="page">
             <HubSideBar/>
             <div className="main-view">
                 <div className="head-bar">
-                    <button>+</button>
+                    <button onClick={handleCRRoute}>+</button>
                     <button>F</button>
                     <input
                         placeholder="Search"
