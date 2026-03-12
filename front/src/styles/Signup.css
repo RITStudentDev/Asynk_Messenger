@@ -13,21 +13,12 @@ h2 {
     width: fit-content;
     padding: 10px 40px 30px 40px;
     background-color: var(--ui-main-);
+    margin: auto;
 }
 
 .signup-box form button {
     display: block;
     width: 100%;
-}
-
-.submit-button {
-    margin-top: 8px;
-    background-color: #3ea4db;
-    border-radius: 0px;
-}
-
-button:hover {
-    background-color: #60c0f3;
 }
 
 .login{

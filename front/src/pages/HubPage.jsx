@@ -21,7 +21,7 @@ function HubPage (){
     }, [])
 
     const handleCRRoute  = () => {
-        navigate('createroom')
+        navigate('/createroom')
     }
 
     return(

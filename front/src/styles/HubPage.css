@@ -9,13 +9,6 @@ body {
     background: rgb(16, 16, 18);
 }
 
-input {
-    margin: 22px;
-    border-radius: 10px;
-    min-width: 300px;
-    max-width: 25rem;
-}
-
 button {
     width: 40px;
     height: 40px;
