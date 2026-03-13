@@ -29,12 +29,12 @@ function HubPage (){
             <HubSideBar/>
             <div className="main-view">
                 <div className="head-bar">
-                    <button onClick={handleCRRoute}>+</button>
-                    <button>F</button>
+                    <button className="header-button" Click={handleCRRoute}>+</button>
+                    <button className="header-button">F</button>
                     <input
                         placeholder="Search"
                     ></input>
-                    <button>Me</button>
+                    <button className="header-button">Me</button>
                 </div>
                 <div className="room-container">
                     {rooms.map((room) => (
