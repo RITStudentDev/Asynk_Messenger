@@ -1,10 +1,16 @@
 .message-container {
     display: flex;
     width: 100%;
+    margin: 20px 0;
+}
+
+.message-container:hover {
+    background-color: #cccccc11;
 }
 
 .content-container {
     padding: 18px 18px 18px 9px;
+    width: 100%;
 }
 
 .pfp {
@@ -21,8 +27,10 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    font-size: 12px;
 }
 
 .message-meta p {
     opacity: 60%;
 }
+

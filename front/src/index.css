@@ -5,11 +5,9 @@
   --color-bg:         #ffffff;
   --color-link:       #646cff;
   --color-link-hover: #747bff;
-  --color-btn-bg:     #4a80f6;
-  --color-btn-border: #3e88ff;
-  --color-btn-hover:  #56a5ff;
-
-  --radius-btn: 8px 0 8px 0;
+  --color-btn-bg:     #1c1d22;
+  --color-btn-border: #3d3d45;
+  --color-btn-hover:  #28292f;
 
   --font-sans: "Inter", "Manrope", "Roboto", "Montserrat", sans-serif;
 }
@@ -73,8 +71,8 @@ a:hover {
 }
 
 button {
-  border-radius: var(--radius-btn);
-  border: 1px solid var(--color-btn-border);
+  border-radius: 8px;
+  border: 2px solid var(--color-btn-border);
   padding: 10px;
   font-size: 1em;
   font-weight: 500;

@@ -11,7 +11,10 @@ function ServerChatPage (){
 
     const {roomId} = useParams();
     const [messages, setMessages] = useState([]);
-    const ws = useRef(null)
+    const [roomName, setRoomName] = useState("");
+    const presentRef = useRef(null);
+    const isInitialLoad = useRef(true);
+    const ws = useRef(null);
 
     useEffect(() => {
         ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomId}/`)
@@ -48,16 +51,37 @@ function ServerChatPage (){
             })
             const data = await response.json()
             setMessages(data.messages)
+            isInitialLoad.current = true;
         }
         fetchMessages()
     }, [roomId])
-        
+    
+    useEffect(() => {
+        if (isInitialLoad.current){
+            presentRef.current?.scrollIntoView({behavior: 'instant'})
+            isInitialLoad.current = false;
+        } else {
+            presentRef.current?.scrollIntoView({behavior: 'smooth'})
+        }
+    }, [messages])
+
+    useEffect(() => {
+        const fetchRoom = async () => {
+            const response = await fetch(`http://localhost:8000/rooms/${roomId}/`, {
+                credentials: 'include'
+            })
+            const data = await response.json()
+            setRoomName(data.roomName)
+        }
+        fetchRoom()
+    }, [roomId])
+
     return (
         <div className='chat-page'>
             <HubSideBar/>
             <div className='chat-view'>
-                <h3>Connected: {roomId}</h3>
-                <div>
+                <h3>{roomName}</h3>
+                <div className='chat-list'>
                     <ul>
                         {messages.map((message, index) => (
                             <Message
@@ -68,6 +92,7 @@ function ServerChatPage (){
                             />
                         ))}
                     </ul>
+                    <div ref={presentRef}/>
                 </div>
                 <ChatInput ws={ws} roomId={roomId}/>
             </div>

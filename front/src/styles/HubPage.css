@@ -54,7 +54,7 @@ body {
 }
 
 .room-scroller::-webkit-scrollbar-track {
-  background: #000000;
+  background: #00000044;
   border-radius: 30px;
   
 }
