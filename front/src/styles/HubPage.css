@@ -6,7 +6,7 @@
 }
 
 body {
-    background: rgb(16, 16, 18);
+    background: linear-gradient(17deg, rgb(43, 6, 98) 0%, rgb(11, 3, 34) 52%, #000000ff 100%);
 }
 
 .header-button {
@@ -30,11 +30,38 @@ body {
 }
 
 .main-view {
+    
     display: flex;
     margin-left: auto;
     margin-right: auto;
     flex-direction: column;
     justify-content: center;
+    gap: 25px;
+    margin-bottom: 50px;
+}
+
+.room-search {
+    margin: auto;
+}
+
+.room-scroller {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.room-scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+.room-scroller::-webkit-scrollbar-track {
+  background: #000000;
+  border-radius: 30px;
+  
+}
+
+.room-scroller::-webkit-scrollbar-thumb {
+  background: #1c1d22;
+  border-radius: 30px;
 }
 
 .head-bar {

@@ -32,14 +32,17 @@ function HubPage (){
                     <button className="header-button" Click={handleCRRoute}>+</button>
                     <button className="header-button">F</button>
                     <input
+                        className="room-search"
                         placeholder="Search"
                     ></input>
                     <button className="header-button">Me</button>
                 </div>
-                <div className="room-container">
-                    {rooms.map((room) => (
-                        <RoomProfile key={room.roomId} roomId={room.roomId} roomName={room.roomName} bio={room.bio}/>
-                    ))}
+                <div className="room-scroller">
+                    <div className="room-container">
+                        {rooms.map((room) => (
+                            <RoomProfile key={room.roomId} roomId={room.roomId} roomName={room.roomName} bio={room.bio}/>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
