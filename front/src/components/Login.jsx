@@ -31,6 +31,7 @@ function Login (){
         <div className="signup-box">
             <form onSubmit={handleSubmit}>
                 <h2>Login</h2>
+                <br></br>
                 <TextInput 
                     placeholder="Username" 
                     type="username" 
@@ -44,6 +45,7 @@ function Login (){
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <br></br>
                 <div>
                     <a href="#" className="login">Don't have an account</a>
                 </div>

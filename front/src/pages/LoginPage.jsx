@@ -2,7 +2,9 @@ import Login from "../components/Login";
 
 function LoginPage(){
     return(
-        <Login/>
+        <div className="signup-page">
+            <Login/>
+        </div>
     )
 }
 export default LoginPage
