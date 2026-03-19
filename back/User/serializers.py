@@ -40,7 +40,7 @@ class SignupSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AsynkUser
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ['username', 'password', 'password2']
         extra_kwargs = {
             'password': {'write_only': True}
         }
