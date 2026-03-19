@@ -4,6 +4,7 @@ import '../styles/Signup.css'
 import TextInput from './TextInput.jsx'
 import { login } from '../mod/user.js'
 import { Link } from 'react-router-dom'
+import { get_logged_user } from '../mod/user.js'
 
 function Login (){
     
@@ -21,11 +22,13 @@ function Login (){
 
         try {
             await login(username, password)
-            navigate("/hub")
+            await get_logged_user()
             setMessage("Login successful")
+            navigate("/hub")
         } catch (err) {
             setError(err?.message || "Login failed")
         }
+
     }
 
     return(

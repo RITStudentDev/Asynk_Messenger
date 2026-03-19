@@ -31,6 +31,9 @@ function HubPage (){
     const handleCRRoute  = () => {
         navigate('/createroom')
     }
+    const handeMeRoute = () => {
+        navigate('/me')
+    }
 
     return(
         <div className="page">
@@ -43,7 +46,7 @@ function HubPage (){
                         className="room-search"
                         placeholder="Search"
                     ></input>
-                    <button className="header-button">Me</button>
+                    <button className="header-button" onClick={handeMeRoute}>Me</button>
                 </div>
                 <div className="room-scroller">
                     <div className="room-container">

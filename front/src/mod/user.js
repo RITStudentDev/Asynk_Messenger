@@ -1,5 +1,10 @@
 const BASE_URL = "http://localhost:8000/" 
 
+function getCookie(name) {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+}
+
 export async function login (username, password){
     // CXf25nXw
 
@@ -30,11 +35,16 @@ export async function login (username, password){
 }
 
 export async function get_logged_user(){
+    const cached = localStorage.getItem("logged_user")
+    if (cached) return JSON.parse(cached);
+
+    const access_token = getCookie("access_token")
+
     try {
         const response = await fetch( `${BASE_URL}users/me`, {
             credentials: "include",
             headers: {
-                Authorization : `Bearer ${accessToken}`
+                Authorization : `Bearer ${access_token}`
             }
         });
 
@@ -43,6 +53,7 @@ export async function get_logged_user(){
         }
 
         const data = await response.json();
+        localStorage.setItem("logged_user", JSON.stringify(data));
         return data;
 
     } catch (err) {
@@ -51,9 +62,11 @@ export async function get_logged_user(){
     }
 }
 
+export function clear_user_cache() {
+    localStorage.remove("logged_user")
+}
+
 export async function get_memberships(){
-
-
 
     try{
         const response = await fetch(`${BASE_URL}rooms/`, {
