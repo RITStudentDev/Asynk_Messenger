@@ -12,12 +12,14 @@ function HubPage (){
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
-    // change this to api fetch for looged user rooms
+    // change this to api fetch for logged user rooms
     useEffect(() => {
     const fetchRooms = async () => {
         const cached = sessionStorage.getItem('memberships')
-        if (cached) return setRooms(JSON.parse(cached))
-
+        if (cached) {
+            setLoading(false)
+            return setRooms(JSON.parse(cached))
+        }
         const rooms = await get_memberships()
         sessionStorage.setItem('memberships', JSON.stringify(rooms))
         setRooms(rooms)
