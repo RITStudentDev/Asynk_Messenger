@@ -1,0 +1,12 @@
+.home-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+    width: fit-content;
+    margin: auto;
+}
+
+#title {
+    font-size: 8rem;
+}

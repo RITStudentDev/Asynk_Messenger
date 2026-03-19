@@ -6,11 +6,12 @@ import LoginPage from './pages/LoginPage'
 import RoomChatPage from './pages/RoomChatPage'
 import HubPage from './pages/HubPage'
 import RoomCreationPage from './pages/RoomCreationPage'
+import Home from './pages/Home'
 
 function App() { return (
   <Router>
     <Routes>
-      <Route path="/" element={<h1>rendering</h1>}/>
+      <Route path="/" element={<Home/>}/>
       <Route path="/signup" element={<SignupPage/>}/>
       <Route path="/login" element={<LoginPage/>}/>
       <Route path="/hub" element={<HubPage/>}/>

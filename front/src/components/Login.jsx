@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import '../styles/Signup.css'
 import TextInput from './TextInput.jsx'
 import { login } from '../mod/user.js'
+import { Link } from 'react-router-dom'
 
 function Login (){
     
@@ -47,7 +48,9 @@ function Login (){
                 />
                 <br></br>
                 <div>
-                    <a href="#" className="login">Don't have an account</a>
+                    <Link to={'/signup'}>
+                        <p>Don't have an account.</p>
+                    </Link>
                 </div>
                 <div>
                     <button className="submit-button" type='submit'>Login</button>

@@ -1,7 +1,7 @@
 import '../styles/TextInput.css'
 import { useState } from 'react'
 
-function TextInput({ placeholder, type, value, onChange }){
+function TextInput({ placeholder, type, name, value, onChange }){
     const [focused, setFocused] = useState(false)
     const [filled, setFilled] = useState(false)
 
@@ -22,6 +22,7 @@ function TextInput({ placeholder, type, value, onChange }){
                 placeholder={placeholder}
                 type={type}
                 value={value}
+                name={name}
                 onChange={onChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import '../styles/Signup.css'
 import TextInput from './TextInput.jsx'
+import { Link } from 'react-router-dom';
 
 function Signup (){
     
@@ -28,7 +29,7 @@ function Signup (){
         }
 
         try {
-            const response = await fetch("http://localhost:8000/api/signup/", {
+            const response = await fetch("http://localhost:8000/users/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",  
@@ -55,12 +56,32 @@ function Signup (){
         <div className="signup-box">
             <form onSubmit={handleSubmit}>
                 <h2>Sign up</h2>
-                <TextInput placeholder="Username" type="username"/>
+                <TextInput 
+                    placeholder="Username" 
+                    type="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                />
                 <br/>
-                <TextInput placeholder="Password" type="password"/>
+                <TextInput 
+                    placeholder="Password" 
+                    type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                />
                 <br/>
-                <TextInput placeholder="Confirm password" type="password"/>
-                <a href="#" className="login">Already have an account</a>
+                <TextInput 
+                    placeholder="Confirm password" 
+                    type="password"
+                    name="password2"
+                    value={formData.password2}
+                    onChange={handleChange}
+                />
+                <Link to={'/login'}>
+                    <p>Already have an account.</p>
+                </Link>
                 <button type='submit'>Create Account</button>
                 {error && <p>{error}</p>}
                 {error && <p>{message}</p>}
