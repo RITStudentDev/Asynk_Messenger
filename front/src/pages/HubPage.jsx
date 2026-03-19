@@ -9,16 +9,22 @@ import { get_memberships } from "../mod/user"
 function HubPage (){
 
     const [rooms, setRooms ] = useState([])
+    const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
 
     // change this to api fetch for looged user rooms
     useEffect(() => {
-        const fetchRooms = async () => {
-            const rooms = await get_memberships()
-            setRooms(rooms)
-        }
-        fetchRooms()
-    }, [])
+    const fetchRooms = async () => {
+        const cached = sessionStorage.getItem('memberships')
+        if (cached) return setRooms(JSON.parse(cached))
+
+        const rooms = await get_memberships()
+        sessionStorage.setItem('memberships', JSON.stringify(rooms))
+        setRooms(rooms)
+        setLoading(false)
+    }
+    fetchRooms()
+}, [])
 
     const handleCRRoute  = () => {
         navigate('/createroom')
@@ -29,7 +35,7 @@ function HubPage (){
             <HubSideBar/>
             <div className="main-view">
                 <div className="head-bar">
-                    <button className="header-button" Click={handleCRRoute}>+</button>
+                    <button className="header-button" onClick={handleCRRoute}>+</button>
                     <button className="header-button">F</button>
                     <input
                         className="room-search"
@@ -39,9 +45,20 @@ function HubPage (){
                 </div>
                 <div className="room-scroller">
                     <div className="room-container">
-                        {rooms.map((room) => (
-                            <RoomProfile key={room.roomId} roomId={room.roomId} roomName={room.roomName} bio={room.bio}/>
-                        ))}
+                        {loading ? (
+                            <p>Loading...</p>
+                        ) : rooms.length === 0 ? (
+                            <p>No rooms found</p>
+                        ) : (
+                            rooms.map((room) => (
+                                <RoomProfile
+                                    key={room.roomId}
+                                    roomId={room.roomId}
+                                    roomName={room.roomName}
+                                    bio={room.bio}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>

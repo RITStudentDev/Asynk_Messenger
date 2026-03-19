@@ -32,10 +32,11 @@ body {
 .main-view {
     
     display: flex;
+    flex: 1;
     margin-left: auto;
     margin-right: auto;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 25px;
     margin-bottom: 50px;
 }
@@ -66,14 +67,15 @@ body {
 
 .head-bar {
     display: flex;
+    align-self: top;
     justify-content: center;
     align-items: center;
 }
 
 .room-container {
-    display: grid;
+    display: flex;
     margin: 18px;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    width: 100%;
-    height: 100%;
+    flex-wrap: wrap;
+    flex: 1;
+
 }
