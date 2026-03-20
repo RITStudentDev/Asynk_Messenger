@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { useParams } from 'react-router-dom';
+import { AddUserWindow } from '../components/AddUser';
 
 import '../styles/RoomChatPage.css'
 
@@ -12,6 +13,7 @@ function ServerChatPage (){
     const {roomId} = useParams();
     const [messages, setMessages] = useState([]);
     const [roomName, setRoomName] = useState("");
+    const [visible, setVisible] = useState(false)
     const presentRef = useRef(null);
     const isInitialLoad = useRef(true);
     const ws = useRef(null);
@@ -80,7 +82,13 @@ function ServerChatPage (){
         <div className='chat-page'>
             <HubSideBar/>
             <div className='chat-view'>
-                <h3>{roomName}</h3>
+                <div className='chat-head'>
+                    <h3 className='room-title'>{roomName}</h3>
+                    <div className='add-user-container'>
+                        <button onClick={() => setVisible(true)}>Add member</button>
+                        <AddUserWindow visible={visible} onClose={() => setVisible(false)}/>
+                    </div>
+                </div>
                 <div className='chat-list'>
                     <ul>
                         {messages.map((message, index) => (

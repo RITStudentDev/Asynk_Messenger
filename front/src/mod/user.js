@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:8000/" 
 
-function getCookie(name) {
+export function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
     return match ? match[2] : null;
 }

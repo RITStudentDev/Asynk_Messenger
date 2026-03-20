@@ -6,6 +6,7 @@ from .models import Room, Message, RoomMembership
 from rest_framework.permissions import IsAuthenticated
 from User.views import CookieJWTAuthentication
 from django_q.tasks import async_task
+from User.models import AsynkUser
 import uuid
 
 from .models import Message
@@ -89,13 +90,33 @@ class RoomViewSet(viewsets.ViewSet):
     # POST /rooms/{roomId}/join/  
     @action(detail=True, methods=['post'], url_path='join')
     def join(self, request, pk=None):
+        print("request.data:", request.data)
+
         try:
             room = Room.objects.get(roomId=pk)
+            print("room found:", room)
         except Room.DoesNotExist:
+            print("room not found")
             return Response({'error': 'Room not found.'}, status=status.HTTP_404_NOT_FOUND)
         
-        if room.members.filter(id=request.user.id).exists():
-            return Response({'error': 'You are already a member of this room'}, status=status.HTTP_400_BAD_REQUEST)
+        contact = request.data.get('contact')
+        print("contact:", contact)
+
+        if not contact:
+            print("no contact")
+            return Response({'error': 'Contact is required.'}, status=status.HTTP_400_BAD_REQUEST)
         
-        RoomMembership.objects.create(user=request.user, room=room)
+        try:
+            user = AsynkUser.objects.get(contact=contact)
+            print("user found:", user)
+        except AsynkUser.DoesNotExist:
+            print("user not found")
+            return Response({'error': 'User with that contact not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        if room.members.filter(id=user.id).exists():
+            print("already a member")
+            return Response({'error': 'User is already a member of this room.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        RoomMembership.objects.create(user=user, room=room)
+        print("membership created")
         return Response({'success': True}, status=status.HTTP_201_CREATED)
