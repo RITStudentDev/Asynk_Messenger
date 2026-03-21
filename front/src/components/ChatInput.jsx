@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 
 function ChatInput({ws, roomId}) {
+    const BASE_URL = import.meta.env.VITE_API_URL;
+
     const [content, setContent] = useState('')
     const [currentUser, setCurrentUser] = useState(null)
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch('http://localhost:8000/users/me/', {
+            const response = await fetch(`${BASE_URL}users/me/`, {
                 credentials: 'include'
             })
             const data = await response.json()
@@ -24,7 +26,7 @@ function ChatInput({ws, roomId}) {
             timestamp: new Date().toISOString()
         }))
 
-        await fetch('http://localhost:8000/messages/', {
+        await fetch(`${BASE_URL}messages/`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },

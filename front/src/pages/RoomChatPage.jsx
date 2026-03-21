@@ -9,6 +9,8 @@ import HubSideBar from '../components/HubSideBar'
 import Message from '../components/Message';
 
 function ServerChatPage (){
+    const WS_URL = import.meta.env.VITE_WS_URL;
+    const BASE_URL = import.meta.env.VITE_API_URL;
 
     const {roomId} = useParams();
     const [messages, setMessages] = useState([]);
@@ -19,7 +21,7 @@ function ServerChatPage (){
     const ws = useRef(null);
 
     useEffect(() => {
-        ws.current = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${roomId}/`)
+        ws.current = new WebSocket(`${WS_URL}${roomId}/`)
 
         ws.current.onopen = () => {
             console.log("WebSocket connected")
@@ -48,7 +50,7 @@ function ServerChatPage (){
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const response = await fetch(`http://localhost:8000/rooms/${roomId}/messages/`, {
+            const response = await fetch(`${BASE_URL}rooms/${roomId}/messages/`, {
                 credentials: 'include'
             })
             const data = await response.json()
@@ -69,7 +71,7 @@ function ServerChatPage (){
 
     useEffect(() => {
         const fetchRoom = async () => {
-            const response = await fetch(`http://localhost:8000/rooms/${roomId}/`, {
+            const response = await fetch(`${BASE_URL}rooms/${roomId}/`, {
                 credentials: 'include'
             })
             const data = await response.json()

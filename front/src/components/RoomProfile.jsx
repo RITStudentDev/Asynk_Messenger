@@ -3,8 +3,7 @@ import icon from '../assets/defaultRoom.png'
 import { Link } from 'react-router-dom';
 
 function RoomProfile({roomId, roomName, bio}) {
-    // change later with actaul values
-    //const roomName = 'Room Name';
+
   return (
     <div className="room-profile-container">
         <div id='name-container'>

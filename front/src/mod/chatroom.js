@@ -1,6 +1,6 @@
 import { getCookie } from "./user";
 
-const BASE_URL = "http://localhost:8000/" ;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export async function add_to_room (contact) {
     const access_token = getCookie("access_token")

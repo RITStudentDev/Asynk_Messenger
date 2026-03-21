@@ -1,6 +1,8 @@
 import { useState } from 'react'
 
 function ImageUpload() {
+    const BASE_URL = import.meta.env.VITE_API_URL;
+
     const [preview, setPreview] = useState(null)
     const [file, setFile] = useState(null)
 
@@ -23,7 +25,7 @@ function ImageUpload() {
         const formData = new FormData()
         formData.append('image', file)
 
-        const response = await fetch('http://localhost:8000/upload/', {
+        const response = await fetch(`${BASE_URL}upload/`, {
             method: 'POST',
             credentials: 'include',
             body: formData

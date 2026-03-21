@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8000/" 
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 export function getCookie(name) {
     const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -6,8 +6,7 @@ export function getCookie(name) {
 }
 
 export async function login (username, password){
-    // CXf25nXw
-
+    console.log(BASE_URL)
     try {
         const response = await fetch( `${BASE_URL}users/login/`, {
             method: "POST",

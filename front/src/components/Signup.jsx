@@ -4,6 +4,7 @@ import TextInput from './TextInput.jsx'
 import { Link } from 'react-router-dom';
 
 function Signup (){
+    const BASE_URL = import.meta.env.VITE_API_URL;
     
     const [formData, setFormData] = useState({
         username: "",
@@ -29,7 +30,7 @@ function Signup (){
         }
 
         try {
-            const response = await fetch("http://localhost:8000/users/", {
+            const response = await fetch(`${BASE_URL}users/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",  

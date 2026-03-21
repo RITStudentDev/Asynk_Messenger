@@ -4,6 +4,7 @@ import HubSideBar from '../components/HubSideBar.jsx'
 import '../styles/RoomCreationPage.css'
 
 function RoomCreationPage (){
+    const BASE_URL = import.meta.env.VITE_API_URL;
     const [roomName, setRoomName] = useState('')
     const [bio, setBio] = useState('')
     const navigate = useNavigate()
@@ -11,7 +12,7 @@ function RoomCreationPage (){
     const createRoom = async () => {
         if (!roomName) return
 
-        const response = await fetch('http://localhost:8000/rooms/', {
+        const response = await fetch(`${BASE_URL}rooms/`, {
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json'},
