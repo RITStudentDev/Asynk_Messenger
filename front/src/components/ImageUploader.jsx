@@ -31,7 +31,6 @@ function ImageUpload() {
             body: formData
         })
         const data = await response.json()
-        console.log(data)
     }
 
     return (

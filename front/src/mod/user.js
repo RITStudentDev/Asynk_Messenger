@@ -6,7 +6,6 @@ export function getCookie(name) {
 }
 
 export async function login (username, password){
-    console.log(BASE_URL)
     try {
         const response = await fetch( `${BASE_URL}users/login/`, {
             method: "POST",

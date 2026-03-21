@@ -9,13 +9,11 @@ function Me (){
     useEffect(() => {
         const fetchMe = async () => {
             const logged_user = await get_logged_user();
-            console.log(logged_user)
             setUser(logged_user);
         }
         fetchMe()
     }, [])
 
-    console.log(user)
     
     if (!user) return <p>loading...</p>
 
