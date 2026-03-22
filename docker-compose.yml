@@ -1,14 +1,55 @@
-
 services:
-  db:
-    image: postgres
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.backend
     restart: always
     environment:
-      POSTGRES_PASSWORD: ${PGPASSWORD}
-      POSTGRES_DB: AsynkMsgDB
-    ports:
-      - "5432:5432"
+      - DJANGO_ENV=production
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata:
+      - ./back:/app
+    ports:
+      - "8080:8000"
+    depends_on:
+      - redis
+    command: >
+      sh -c "python manage.py migrate &&
+             daphne -b 0.0.0.0 -p 8000 back.asgi:application"
+
+  worker:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.backend
+    restart: always
+    environment:
+      - DJANGO_ENV=production
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1
+    volumes:
+      - ./back:/app
+    depends_on:
+      - redis
+    command: python manage.py qcluster
+
+  frontend:
+    build:
+      context: ./front
+      dockerfile: Dockerfile.frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
+    enable_ipv6: false

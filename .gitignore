@@ -213,3 +213,8 @@ __marimo__/
 
 # macOS
 .DS_Store
+
+# Supabase
+.supabase/
+supabase/.branches
+supabase/.temp
