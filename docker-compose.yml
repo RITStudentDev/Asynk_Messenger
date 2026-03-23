@@ -5,11 +5,29 @@ services:
     ports:
       - "6379:6379"
 
+  db:
+    image: postgres:16
+    env_file:
+      - ./back/.env.production
+    environment:
+      - DJANGO_ENV=production
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./back
       dockerfile: Dockerfile.backend
     restart: always
+    env_file:
+      - ./back/.env.production
     environment:
       - DJANGO_ENV=production
     sysctls:
@@ -19,7 +37,10 @@ services:
     ports:
       - "8080:8000"
     depends_on:
-      - redis
+      redis:
+        condition: service_started
+      db:
+        condition: service_healthy
     command: >
       sh -c "python manage.py migrate &&
              daphne -b 0.0.0.0 -p 8000 back.asgi:application"
@@ -29,6 +50,8 @@ services:
       context: ./back
       dockerfile: Dockerfile.backend
     restart: always
+    env_file:
+      - ./back/.env.production
     environment:
       - DJANGO_ENV=production
     sysctls:
@@ -36,7 +59,8 @@ services:
     volumes:
       - ./back:/app
     depends_on:
-      - redis
+      db:
+        condition: service_healthy
     command: python manage.py qcluster
 
   frontend:
@@ -48,6 +72,9 @@ services:
       - "5173:5173"
     depends_on:
       - backend
+
+volumes:
+  postgres_data:
 
 networks:
   default:
