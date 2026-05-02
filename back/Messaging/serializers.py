@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Message, Room, RoomMembership
+from .models import Message, Room, RoomMembership, Channel
 
 class MessageSerializer(serializers.ModelSerializer):
 
@@ -7,7 +7,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['messageId', 'senderId', 'sender_username', 'receiverId', 'room', 'content', 'timestamp', 'status']
+        fields = ['messageId', 'senderId', 'sender_username', 'receiverId', 'channel', 'content', 'timestamp', 'status']
         read_only_fields = ['messageId', 'timestamp', 'status', 'senderId']
 
 class RoomMembershipSerializer(serializers.ModelSerializer):
@@ -29,6 +29,7 @@ class RoomSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         room = Room.objects.create(owner=request.user, **validated_data)
+        Channel.objects.create(parent_room=room, name='general')
         RoomMembership.objects.create(user=request.user, room=room)
         return room
 
@@ -36,3 +37,9 @@ class RoomSerializer(serializers.ModelSerializer):
         model = Room
         fields = ['roomId', 'roomName', 'icon', 'bio', 'owner', 'members', 'member_count', 'timeCreated']
         read_only_fields = ['roomId', 'timeCreated', 'owner']
+
+class ChannelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Channel
+        fields = ['channel_id', 'parent_room', 'name']
