@@ -41,6 +41,7 @@ class Channel(models.Model):
     channel_id = models.CharField(primary_key=True, max_length=16, default=generate_id)
     parent_room = models.ForeignKey('Room', on_delete=models.CASCADE, related_name='channels')
     name = models.CharField(max_length=25, default='New Channel')
+    is_default = models.BooleanField(default=False)
 
 class Message(models.Model):
 

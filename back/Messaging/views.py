@@ -38,7 +38,7 @@ class MessageViewSet(viewsets.ViewSet):
         return Response({'message': list(messages)})
     
 class ChannelViewSet(viewsets.ViewSet):
-    queryset = Room.objects.all()
+    queryset = Channel.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [CookieJWTAuthentication]
 
@@ -58,7 +58,7 @@ class ChannelViewSet(viewsets.ViewSet):
         except Channel.DoesNotExist:
             return Response({'error': 'Channel not does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
-        messages = Message.objects.filter(channel=pk).order_by('timestamp')
+        messages = Message.objects.filter(channel=channel).order_by('timestamp')
         serializer = MessageSerializer(messages, many=True)
         return Response({'messages': serializer.data})
 
@@ -95,20 +95,20 @@ class RoomViewSet(viewsets.ViewSet):
         serializer = RoomSerializer(room)
         return Response(serializer.data)
     
-    # GET /rooms/{roomId}//messages/
-    @action(detail=True, methods=['get'], url_path='messages')
-    def get_channel_messages(self, request, pk=None):
+    # GET /rooms/{roomId}/channels/
+    @action(detail=True, methods=['get'], url_path='channels')
+    def get_channels(self, request, pk=None):
         try:
-            room=Room.objects.get(roomId=pk)
+            room = Room.objects.get(roomId=pk)
         except Room.DoesNotExist:
-            return Response({'error': 'Room not does not exist'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Room does not exist'}, status=status.HTTP_404_NOT_FOUND)
         
         if not room.members.filter(id=request.user.id).exists():
-            return Response({'error': 'You are not a memeber of this room'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'You are not a member of this room'}, status=status.HTTP_403_FORBIDDEN)
         
-        messages = Message.objects.filter(room=pk).order_by('timestamp')
-        serializer = MessageSerializer(messages, many=True)
-        return Response({'messages': serializer.data})
+        channels = Channel.objects.filter(parent_room=room)
+        serializer = ChannelSerializer(channels, many=True)
+        return Response({'channels': serializer.data})
 
     # POST /rooms/{roomId}/join/  
     @action(detail=True, methods=['post'], url_path='join')

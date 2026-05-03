@@ -29,7 +29,7 @@ class RoomSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         room = Room.objects.create(owner=request.user, **validated_data)
-        Channel.objects.create(parent_room=room, name='general')
+        Channel.objects.create(parent_room=room, name='general', is_default=True)
         RoomMembership.objects.create(user=request.user, room=room)
         return room
 
@@ -42,4 +42,4 @@ class ChannelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Channel
-        fields = ['channel_id', 'parent_room', 'name']
+        fields = ['channel_id', 'parent_room', 'name', 'is_default']

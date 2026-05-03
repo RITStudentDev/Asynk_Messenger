@@ -13,6 +13,7 @@ function ServerChatPage (){
     const BASE_URL = import.meta.env.VITE_API_URL;
 
     const {roomId} = useParams();
+    const {channelId} = useParams();
     const [messages, setMessages] = useState([]);
     const [roomName, setRoomName] = useState("");
     const [visible, setVisible] = useState(false)
@@ -50,7 +51,7 @@ function ServerChatPage (){
 
     useEffect(() => {
         const fetchMessages = async () => {
-            const response = await fetch(`${BASE_URL}rooms/${roomId}/messages/`, {
+            const response = await fetch(`${BASE_URL}channels/${channelId}/messages/`, {
                 credentials: 'include'
             })
             const data = await response.json()
@@ -58,7 +59,7 @@ function ServerChatPage (){
             isInitialLoad.current = true;
         }
         fetchMessages()
-    }, [roomId])
+    }, [channelId])
     
     useEffect(() => {
         if (isInitialLoad.current){
