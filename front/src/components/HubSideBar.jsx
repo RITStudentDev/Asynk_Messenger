@@ -10,7 +10,7 @@ function HubSideBar() {
     useEffect(() => {
         if (!roomId) return
         const fetchChannels = async () => {
-            const data = await get_room_channels()
+            const data = await get_room_channels(roomId)
             if (data?.channels) setChannels(data.channels)
         }
         fetchChannels()

@@ -49,8 +49,8 @@ class ChannelViewSet(viewsets.ViewSet):
             channel = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    # GET /channels/{id}/messages/
+
+    # GET /channels/{channel_id} /messages/
     @action(detail=True, methods=['get'], url_path='messages')
     def get_channel_messages(self, request, pk=None):
         try:
