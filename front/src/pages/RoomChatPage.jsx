@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { AddUserWindow } from "../components/AddUser";
-import { get_current_room, get_room_channels } from "../mod/chatroom";
+import { get_current_room } from "../mod/chatroom";
 
 import "../styles/RoomChatPage.css";
 import ChatInput from "../components/ChatInput";
@@ -16,65 +16,25 @@ function ServerChatPage() {
 
   const [messages, setMessages] = useState([]);
   const [roomName, setRoomName] = useState("");
+  const [channelName, setChannelName] = useState("");
   const [visible, setVisible] = useState(false);
-  const presentRef = useRef(null);
-  const isInitialLoad = useRef(true);
-  const ws = useRef(null);
 
   useEffect(() => {
     if (!roomId) return
     const fetchRoom = async () => {
       const room = await get_current_room(roomId)
+      console.log(room)
       if (room) setRoomName(room.roomName)
     }
     fetchRoom()
   }, [roomId])
-
-  useEffect(() => {
-    if (!channelId) return
-    const fetchMessages = async () => {
-      const res = await fetch(`${BASE_URL}channels/${channelId}/messages/`, {
-        credentials: 'include'
-      })
-      const data = await res.json()
-      setMessages(data.messages)
-      isInitialLoad.current = true
-    }
-    fetchMessages()
-  }, [channelId])
-
-  useEffect(() => {
-    if (!roomId) return
-    ws.current = new WebSocket(`${WS_URL}${roomId}/`);
-    ws.current.onopen = () => console.log("WebSocket connected");
-    ws.current.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMessages((prev) => [...prev, {
-        content: data.content,
-        sender_username: data.sender_username,
-        timestamp: data.timestamp,
-      }]);
-    };
-    ws.current.onclose = () => console.log("WebSocket disconnected");
-    ws.current.onerror = (err) => console.error("WebSocket error: ", err);
-    return () => ws.current.close();
-  }, [roomId]);
-
-  useEffect(() => {
-    if (isInitialLoad.current) {
-      presentRef.current?.scrollIntoView({ behavior: "instant" });
-      isInitialLoad.current = false;
-    } else {
-      presentRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
 
   return (
     <div className="chat-page">
       <HubSideBar />
       <div className="chat-view">
         <div className="chat-head">
-          <h3 className="room-title">{roomName}</h3>
+          <h3 className="channel-title">{channelName}</h3>
           <div className="add-user-container">
             <button onClick={() => setVisible(true)}>Add member</button>
             <AddUserWindow visible={visible} onClose={() => setVisible(false)} />
@@ -91,9 +51,8 @@ function ServerChatPage() {
               />
             ))}
           </ul>
-          <div ref={presentRef} />
         </div>
-        <ChatInput ws={ws} roomId={roomId} />
+        {/*<ChatInput/>*/}
       </div>
     </div>
   );

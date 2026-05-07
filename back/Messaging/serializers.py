@@ -18,10 +18,17 @@ class RoomMembershipSerializer(serializers.ModelSerializer):
         fields = ['user', 'username', 'role']
         read_only_fields = ['joined_at']
 
+class ChannelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Channel
+        fields = ['channel_id', 'name', 'is_default']
+
 class RoomSerializer(serializers.ModelSerializer):
     members = RoomMembershipSerializer(source='memberships', many=True, read_only=True)
     owner = serializers.StringRelatedField(read_only=True)
     member_count = serializers.SerializerMethodField()
+    channels = ChannelSerializer(many=True, read_only=True)
 
     def get_member_count(self, obj):
         return obj.members.count()
@@ -35,11 +42,5 @@ class RoomSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Room
-        fields = ['roomId', 'roomName', 'icon', 'bio', 'owner', 'members', 'member_count', 'timeCreated']
+        fields = ['roomId', 'roomName', 'icon', 'bio', 'channels', 'owner', 'members', 'member_count', 'timeCreated']
         read_only_fields = ['roomId', 'timeCreated', 'owner']
-
-class ChannelSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Channel
-        fields = ['channel_id', 'parent_room', 'name', 'is_default']

@@ -46,8 +46,8 @@ export async function get_current_room (roomId) {
         // Stores valid response JSON into variable to be saved
         const room = await res.json()
         // Saves room JSON object to local storage under "current_room" key
-        console.log(room)
         localStorage.setItem('current_room', JSON.stringify(room))
+        return room
     } catch (err){
         throw err
     }
@@ -56,15 +56,4 @@ export async function get_current_room (roomId) {
 // Clears current_room cache
 export function clear_room_cache(){
     localStorage.removeItem('current_room')
-}
-
-// Gets all channels in a room
-export async function get_room_channels(roomId) {
-    try {
-        const channelRes = await fetch(`${BASE_URL}rooms/${roomId}/channels/`, {
-            credentials: 'include'
-        })
-        const channelData = await channelRes.json()
-        return channelData
-    } catch (err) { throw err }
 }

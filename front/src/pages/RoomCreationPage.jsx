@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { get_room_channels } from "../mod/chatroom.js"
 import HubSideBar from '../components/HubSideBar.jsx'
 import '../styles/RoomCreationPage.css'
 
